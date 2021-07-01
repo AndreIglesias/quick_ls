@@ -6,7 +6,7 @@
 #    By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/05/20 17:00:07 by ciglesia          #+#    #+#              #
-#    Updated: 2021/07/01 18:05:06 by ciglesia         ###   ########.fr        #
+#    Updated: 2021/07/01 18:31:26 by ciglesia         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -24,7 +24,7 @@ LIBSTD		=	$(LIB)/libstd/
 LIBSTR		=	$(LIB)/libstring/
 LIBALG		=	$(LIB)/libalgorithm/
 
-INC_LIB		=	-L$(LIBSTD) -lstd -L$(LIBSTR) -lstring
+INC_LIB		=	-L$(LIBALG) -lalgorithm -L$(LIBSTD) -lstd -L$(LIBSTR) -lstring
 
 INCLUDE		=	-O3 -I $(INC) -I $(LIBINC)
 
