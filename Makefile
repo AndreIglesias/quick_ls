@@ -6,7 +6,7 @@
 #    By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/05/20 17:00:07 by ciglesia          #+#    #+#              #
-#    Updated: 2021/06/30 00:13:18 by ciglesia         ###   ########.fr        #
+#    Updated: 2021/07/01 18:05:06 by ciglesia         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -16,7 +16,17 @@ NAME		=	ft_ls
 # General
 INC			=	./include/
 
-INCLUDE		=	-O3 -I $(INC)
+# Lib
+LIB			=	./libft/
+LIBINC		=	$(LIB)/include/
+
+LIBSTD		=	$(LIB)/libstd/
+LIBSTR		=	$(LIB)/libstring/
+LIBALG		=	$(LIB)/libalgorithm/
+
+INC_LIB		=	-L$(LIBSTD) -lstd -L$(LIBSTR) -lstring
+
+INCLUDE		=	-O3 -I $(INC) -I $(LIBINC)
 
 #***************** SRC ********************#
 
@@ -45,6 +55,10 @@ else
 CFLAGS		=	-Wall -Wextra -Werror
 endif
 
+ifndef VERBOSE
+.SILENT:
+endif
+
 CC			=	/usr/bin/clang
 RM			=	/bin/rm -f
 ECHO		=	/bin/echo -e
@@ -59,35 +73,42 @@ E0M			=	 "\e[0m"
 #************************ DEPS COMPILATION *************************
 
 %.o		:		../$(DIRSRC)/%.c
-				@printf $(GREEN)"Generating readelf objects... %-33.33s\r" $@
+				@printf $(GREEN)"Generating readelf objects... %-33.33s\r"$(E0M) $@
 				@$(CC) $(CFLAGS) $(INCLUDE) -MMD -o $@ -c $<
 
 #************************ MAIN COMPILATION *************************
 
-$(NAME)	:		$(OBJS)
-				@printf $(E0M)"\n"
-				@$(CC)  $(INCLUDE) $(CFLAGS) -o $(NAME) $(OBJS)
+$(NAME)	:		ftlib $(OBJS)
+				@$(CC)  $(INCLUDE) $(CFLAGS) -o $(NAME) $(OBJS) $(INC_LIB)
 				@$(ECHO) "▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒"
 				@$(ECHO) "▒▒▄▄▄▒▒▒█▒▒▒▒▄▒▒▒▒▒▒▒▒▒▒▄▄▄▒▒▒█▒▒▒▒▄▒▒▒▒▒▒▒▒▒▒▄▄▄▒▒▒█▒▒▒▒▄▒▒▒▒▒▒▒▒"
 				@$(ECHO) "▒█▀█▀█▒█▀█▒▒█▀█▒▄███▄▒▒█▀█▀█▒█▀█▒▒█▀█▒▄███▄▒▒█▀█▀█▒█▀█▒▒█▀█▒▄███▄▒"
 				@$(ECHO) "░█▀█▀█░█▀██░█▀█░█▄█▄█░░█▀█▀█░█▀██░█▀█░█▄█▄█░░█▀█▀█░█▀██░█▀█░█▄█▄█░"
 				@$(ECHO) "░█▀█▀█░█▀████▀█░█▄█▄█░░█▀█▀█░█▀████▀█░█▄█▄█░░█▀█▀█░█▀████▀█░█▄█▄█░"
 				@$(ECHO) "████████▀█████████████████████▀█████████████████████▀█████████████"
-				@$(ECHO) $(BOLD) $(GREEN)'> Compiled' $(E0M)
+				@$(ECHO) $(BOLD)$(GREEN)'> ft_ls Compiled'$(E0M)
 
 clean	:
 				@($(RM) $(OBJS))
 				@($(RM) $(DEPS))
-				@$(ECHO) $(RED) '> Directory cleaned' $(E0M)
+				@(cd $(LIB) && $(MAKE) clean)
+				@$(ECHO) $(BOLD)$(RED)'> ft_ls directory        cleaned'$(E0M)
 
 all		:		$(NAME)
 
-fclean	:		clean
-				@$(RM) $(NAME)
-				@$(ECHO) $(RED) '> Executable removed' $(E0M)
+fclean	:
+				@($(RM) $(OBJS))
+				@($(RM) $(DEPS))
+				@($(RM) $(NAME))
+				@(cd $(LIB) && $(MAKE) fclean)
+				@$(ECHO) $(BOLD)$(RED)'> ft_ls directory        cleaned'$(E0M)
+				@$(ECHO) $(BOLD)$(RED)'> Executable             removed'$(E0M)
 
 re		:		fclean all
 
-.PHONY	:		all clean fclean re
+ftlib	:
+				@(cd $(LIB) && $(MAKE))
+
+.PHONY	:		all clean fclean re ftlib
 
 -include $(DEPS)
