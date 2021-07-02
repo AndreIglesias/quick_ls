@@ -1,38 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ls.h                                               :+:      :+:    :+:   */
+/*   types.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/06/29 19:12:52 by ciglesia          #+#    #+#             */
-/*   Updated: 2021/07/03 00:06:18 by ciglesia         ###   ########.fr       */
+/*   Created: 2021/07/02 23:44:07 by ciglesia          #+#    #+#             */
+/*   Updated: 2021/07/03 00:03:20 by ciglesia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LS_H
-# define LS_H
-
-# include "libalgorithm.h"
-# include "libstring.h"
-# include "libstd.h"
-# include <errno.h>
-# include <dirent.h>
-# include <sys/stat.h>
-# include <string.h>
-
-typedef struct	s_ls
-{
-	char		**dirs;
-	char		**files;
-	t_u_char	flags[120];
-}	t_ls;
+#include "ls.h"
 
 /*
-**	dirent
+**	ENOENT == errno -> dir doesn't exist
 */
 
-int	is_dir(char *filename);
-int	is_file(char *filename);
+int	is_dir(char *filename)
+{
+	DIR* dir;
 
-#endif
+	dir = opendir(filename);
+	if (dir)
+	{
+		closedir(dir);
+		return (1);
+	}
+	return (0);
+}
+
+int	is_file(char *filename)
+{
+	struct stat	path_stat;
+
+	stat(filename, &path_stat);
+	return (S_ISREG(path_stat.st_mode));
+}
