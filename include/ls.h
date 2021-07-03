@@ -6,7 +6,7 @@
 /*   By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/29 19:12:52 by ciglesia          #+#    #+#             */
-/*   Updated: 2021/07/03 14:00:04 by ciglesia         ###   ########.fr       */
+/*   Updated: 2021/07/04 01:16:51 by ciglesia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,11 @@ int		is_file(char *filename);
 **	eval
 */
 
+void	strins(char ***array, char **str, size_t pos, size_t size);
+int		alpha_cmp(char *a, char *b);
+int		alpha_rev(char *a, char *b);
+int		time_cmp(char *a, char *b);
+int		time_rev(char *a, char *b);
 void	ft_ls(t_ls *ls);
 
 #endif
