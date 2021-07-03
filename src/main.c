@@ -6,7 +6,7 @@
 /*   By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/29 19:31:42 by ciglesia          #+#    #+#             */
-/*   Updated: 2021/07/03 00:08:41 by ciglesia         ###   ########.fr       */
+/*   Updated: 2021/07/03 18:14:53 by ciglesia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static int	extract_flags(char *str, t_ls *ls)
 	return (1);
 }
 
-int	ft_usage(void)
+static int	ft_usage(t_ls *ls)
 {
 	ft_printf_fd(2, BOLD"USAGE:\n\t\t"E0M"ls [OPTION]... [FILE]...\n");
 	ft_printf_fd(2, BOLD"DESCRIPTION:\n\t\t"E0M"List information about the\
@@ -53,30 +53,28 @@ int	ft_usage(void)
 	ft_printf_fd(2, BOLD"-R:\t\t"E0M"List subdirectories recursively\n");
 	ft_printf_fd(2, BOLD"-t:\t\t"E0M"Sort by modification time, newest\
  first\n");
+	free(ls->dirs);
+	free(ls->files);
 	return (EXIT_SUCCESS);
 }
 
 static int	input_handler(int ac, char **av, t_ls *ls)
 {
 	int	i;
-	int	files;
-	int	dirs;
 
 	i = 0;
-	files = 0;
-	dirs = 0;
 	while (i < ac)
 	{
 		if (!ft_strcmp(av[i], "--help"))
-			exit(ft_usage());
+			exit(ft_usage(ls));
 		if (!(av[i][0] == '-' && av[i][1]) || !ft_strcmp(av[i], "--"))
 		{
 			if (is_dir(av[i]))
-				ls->dirs[dirs++] = av[i];
+				ls->dirs[ls->size_d++] = av[i];
 			else if (is_file(av[i]))
-				ls->files[files++] = av[i];
+				ls->files[ls->size_f++] = av[i];
 			else
-				ft_printf_fd(2, "ft_ls: cannot access '%s': %s\n", av[i], strerror(errno));
+				ft_printf_fd(2, WACCESS, av[i], strerror(errno));
 		}
 		else if (av[i][0] == '-' && av[i][1] && !extract_flags(&av[i][1], ls))
 			return (0);
@@ -85,20 +83,27 @@ static int	input_handler(int ac, char **av, t_ls *ls)
 	return (1);
 }
 
-void destructor (void) __attribute__((destructor));
 int	main(int ac, char **av)
 {
 	t_ls	ls;
 
+	ls.size_d = 0;
+	ls.size_f = 0;
 	ft_bzero(ls.flags, sizeof(ls.flags));
 	ls.dirs = ft_calloc(ac, sizeof(char *));
 	ls.files = ft_calloc(ac, sizeof(char *));
-	if (!input_handler(ac - 1, &av[1], &ls))
+	if (!ls.dirs || !ls.files || !input_handler(ac - 1, &av[1], &ls))
+	{
+		free(ls.dirs);
+		free(ls.files);
 		return (EXIT_FAILURE);
-	return (0);
+	}
+	ft_ls(&ls);
+	free(ls.dirs);
+	free(ls.files);
+	return (EXIT_SUCCESS);
 }
 
 void	destructor(void)
 {
-	ft_printf("DESTRUCTOR\n");
 }

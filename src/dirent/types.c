@@ -6,7 +6,7 @@
 /*   By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/02 23:44:07 by ciglesia          #+#    #+#             */
-/*   Updated: 2021/07/03 00:03:20 by ciglesia         ###   ########.fr       */
+/*   Updated: 2021/07/03 12:27:45 by ciglesia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 int	is_dir(char *filename)
 {
-	DIR* dir;
+	DIR	*dir;
 
 	dir = opendir(filename);
 	if (dir)

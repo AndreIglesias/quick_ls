@@ -6,7 +6,7 @@
 #    By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/05/20 17:00:07 by ciglesia          #+#    #+#              #
-#    Updated: 2021/07/02 23:46:21 by ciglesia         ###   ########.fr        #
+#    Updated: 2021/07/03 13:55:57 by ciglesia         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -32,11 +32,13 @@ INCLUDE		=	-O3 -I $(INC) -I $(LIBINC)
 
 DIRSRC		=	./src/
 DIRENT		=	$(DIRSRC)/dirent/
+DIREVAL		=	$(DIRSRC)/eval/
 
 SRC			=	main.c
 DRNT		=	types.c
+EVAL		=	ft_ls.c
 
-SRCS		=	$(SRC) $(DRNT)
+SRCS		=	$(SRC) $(DRNT) $(EVAL)
 
 #***************** DEPS ******************#
 
@@ -79,6 +81,10 @@ E0M			=	 "\e[0m"
 				@$(CC) $(CFLAGS) $(INCLUDE) -MMD -o $@ -c $<
 
 %.o		:		../$(DIRENT)/%.c
+				@printf $(GREEN)"Generating ft_ls objects... %-33.33s\r"$(E0M) $@
+				@$(CC) $(CFLAGS) $(INCLUDE) -MMD -o $@ -c $<
+
+%.o		:		../$(DIREVAL)/%.c
 				@printf $(GREEN)"Generating ft_ls objects... %-33.33s\r"$(E0M) $@
 				@$(CC) $(CFLAGS) $(INCLUDE) -MMD -o $@ -c $<
 
