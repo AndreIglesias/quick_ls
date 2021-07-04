@@ -6,7 +6,7 @@
 /*   By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/29 19:31:42 by ciglesia          #+#    #+#             */
-/*   Updated: 2021/07/03 18:14:53 by ciglesia         ###   ########.fr       */
+/*   Updated: 2021/07/04 20:07:49 by ciglesia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ static int	input_handler(int ac, char **av, t_ls *ls)
 		{
 			if (is_dir(av[i]))
 				ls->dirs[ls->size_d++] = av[i];
-			else if (is_file(av[i]))
+			else if (is_file(av[i]) > 0)
 				ls->files[ls->size_f++] = av[i];
 			else
 				ft_printf_fd(2, WACCESS, av[i], strerror(errno));

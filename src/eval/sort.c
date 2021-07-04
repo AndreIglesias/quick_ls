@@ -6,7 +6,7 @@
 /*   By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/04 01:07:09 by ciglesia          #+#    #+#             */
-/*   Updated: 2021/07/04 01:15:42 by ciglesia         ###   ########.fr       */
+/*   Updated: 2021/07/04 20:35:03 by ciglesia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 
 void	strins(char ***array, char **str, size_t pos, size_t size)
 {
-	ft_memins((void**)array, str, sizeof(char *) * pos,
-			  (t_sizes){sizeof(char *) * size, sizeof(char **)});
+	ft_memins((void **)array, str, sizeof(char *) * pos,
+		(t_sizes){sizeof(char *) * size, sizeof(char **)});
 }
 
 int	alpha_cmp(char *a, char *b)
