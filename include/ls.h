@@ -6,7 +6,7 @@
 /*   By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/29 19:12:52 by ciglesia          #+#    #+#             */
-/*   Updated: 2021/07/04 20:41:55 by ciglesia         ###   ########.fr       */
+/*   Updated: 2021/07/05 00:47:09 by ciglesia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef struct s_ls
 }	t_ls;
 
 void	destructor(void)__attribute__((destructor));
+void	exit_ls(t_ls *ls, int status);
 
 /*
 **	dirent
@@ -45,8 +46,9 @@ void	destructor(void)__attribute__((destructor));
 int		is_dir(char *filename);
 int		is_file(char *filename);
 char	file_type(mode_t st_mode);
-void	print_element(char *cont, t_u_char *flags);
+void	print_element(char *cont, t_u_char *flags, t_ls *ls);
 void	element_color(char *cont, struct stat buf);
+
 /*
 **	eval
 */

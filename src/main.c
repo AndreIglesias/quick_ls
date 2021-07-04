@@ -6,11 +6,18 @@
 /*   By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/29 19:31:42 by ciglesia          #+#    #+#             */
-/*   Updated: 2021/07/04 20:07:49 by ciglesia         ###   ########.fr       */
+/*   Updated: 2021/07/05 00:48:16 by ciglesia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ls.h"
+
+void	exit_ls(t_ls *ls, int status)
+{
+	free(ls->dirs);
+	free(ls->files);
+	exit(status);
+}
 
 static int	extract_flags(char *str, t_ls *ls)
 {
@@ -40,7 +47,7 @@ static int	extract_flags(char *str, t_ls *ls)
 	return (1);
 }
 
-static int	ft_usage(t_ls *ls)
+static int	ft_usage(void)
 {
 	ft_printf_fd(2, BOLD"USAGE:\n\t\t"E0M"ls [OPTION]... [FILE]...\n");
 	ft_printf_fd(2, BOLD"DESCRIPTION:\n\t\t"E0M"List information about the\
@@ -53,8 +60,6 @@ static int	ft_usage(t_ls *ls)
 	ft_printf_fd(2, BOLD"-R:\t\t"E0M"List subdirectories recursively\n");
 	ft_printf_fd(2, BOLD"-t:\t\t"E0M"Sort by modification time, newest\
  first\n");
-	free(ls->dirs);
-	free(ls->files);
 	return (EXIT_SUCCESS);
 }
 
@@ -66,7 +71,7 @@ static int	input_handler(int ac, char **av, t_ls *ls)
 	while (i < ac)
 	{
 		if (!ft_strcmp(av[i], "--help"))
-			exit(ft_usage(ls));
+			exit_ls(ls, ft_usage());
 		if (!(av[i][0] == '-' && av[i][1]) || !ft_strcmp(av[i], "--"))
 		{
 			if (is_dir(av[i]))
@@ -93,14 +98,9 @@ int	main(int ac, char **av)
 	ls.dirs = ft_calloc(ac, sizeof(char *));
 	ls.files = ft_calloc(ac, sizeof(char *));
 	if (!ls.dirs || !ls.files || !input_handler(ac - 1, &av[1], &ls))
-	{
-		free(ls.dirs);
-		free(ls.files);
-		return (EXIT_FAILURE);
-	}
+		exit_ls(&ls, EXIT_FAILURE);
 	ft_ls(&ls);
-	free(ls.dirs);
-	free(ls.files);
+	exit_ls(&ls, EXIT_SUCCESS);
 	return (EXIT_SUCCESS);
 }
 

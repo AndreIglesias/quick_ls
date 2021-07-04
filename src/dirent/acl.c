@@ -6,13 +6,13 @@
 /*   By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/04 20:31:31 by ciglesia          #+#    #+#             */
-/*   Updated: 2021/07/04 20:41:39 by ciglesia         ###   ########.fr       */
+/*   Updated: 2021/07/05 00:46:36 by ciglesia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ls.h"
 
-static void	print_grp(gid_t st_gid)
+static void	print_grp(gid_t st_gid, t_ls *ls)
 {
 	struct group	*grp;
 
@@ -20,12 +20,12 @@ static void	print_grp(gid_t st_gid)
 	if (grp == NULL)
 	{
 		perror("getgrgid");
-		exit(EXIT_FAILURE);
+		exit_ls(ls, EXIT_FAILURE);
 	}
 	ft_printf("%s ", grp->gr_name);
 }
 
-static void	print_user(uid_t st_uid)
+static void	print_user(uid_t st_uid, t_ls *ls)
 {
 	struct passwd	*user;
 
@@ -33,7 +33,7 @@ static void	print_user(uid_t st_uid)
 	if (user == NULL)
 	{
 		perror("getpwuid");
-		exit(EXIT_FAILURE);
+		exit_ls(ls, EXIT_FAILURE);
 	}
 	ft_printf("%s ", user->pw_name);
 }
@@ -49,7 +49,7 @@ static void	print_permissions(mode_t st_mode)
 		rwx[st_mode & 7]);
 }
 
-void	print_element(char *cont, t_u_char *flags)
+void	print_element(char *cont, t_u_char *flags, t_ls *ls)
 {
 	struct stat	buf;
 
@@ -57,14 +57,14 @@ void	print_element(char *cont, t_u_char *flags)
 	if (lstat(cont, &buf) == -1)
 	{
 		perror("lstat");
-		exit(EXIT_FAILURE);
+		exit_ls(ls, EXIT_FAILURE);
 	}
 	if (flags['l'])
 	{
 		print_permissions(buf.st_mode);
 		ft_printf("%lu ", buf.st_nlink);
-		print_user(buf.st_uid);
-		print_grp(buf.st_gid);
+		print_user(buf.st_uid, ls);
+		print_grp(buf.st_gid, ls);
 		ft_printf("%lu ", buf.st_size);
 		ft_printf("%.12s ", &ctime(&buf.st_mtime)[4]);
 	}
