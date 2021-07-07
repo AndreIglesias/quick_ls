@@ -6,7 +6,7 @@
 /*   By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/03 13:53:36 by ciglesia          #+#    #+#             */
-/*   Updated: 2021/07/07 21:47:20 by ciglesia         ###   ########.fr       */
+/*   Updated: 2021/07/08 00:29:42 by ciglesia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	print_files(char **files, t_u_char *flags, t_ls *ls)
 
 void	print_content(char content[][256], char *path, t_ls *ls, size_t size)
 {
-	int		i;
+	size_t	i;
 	char	*file;
 	char	*tmp;
 
