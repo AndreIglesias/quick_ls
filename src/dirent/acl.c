@@ -6,7 +6,7 @@
 /*   By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/04 20:31:31 by ciglesia          #+#    #+#             */
-/*   Updated: 2021/07/05 00:46:36 by ciglesia         ###   ########.fr       */
+/*   Updated: 2021/07/07 21:39:45 by ciglesia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,16 +56,16 @@ void	print_element(char *cont, t_u_char *flags, t_ls *ls)
 	ft_memset(&buf, 0, sizeof(struct stat *));
 	if (lstat(cont, &buf) == -1)
 	{
-		perror("lstat");
+		ft_printf_fd(2, WLSTAT, cont, strerror(errno));
 		exit_ls(ls, EXIT_FAILURE);
 	}
 	if (flags['l'])
 	{
 		print_permissions(buf.st_mode);
-		ft_printf("%lu ", buf.st_nlink);
+		ft_printf("%4lu ", buf.st_nlink);
 		print_user(buf.st_uid, ls);
 		print_grp(buf.st_gid, ls);
-		ft_printf("%lu ", buf.st_size);
+		ft_printf("%10lu ", buf.st_size);
 		ft_printf("%.12s ", &ctime(&buf.st_mtime)[4]);
 	}
 	element_color(cont, buf);

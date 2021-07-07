@@ -6,7 +6,7 @@
 /*   By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/29 19:12:52 by ciglesia          #+#    #+#             */
-/*   Updated: 2021/07/05 00:47:09 by ciglesia         ###   ########.fr       */
+/*   Updated: 2021/07/07 21:11:53 by ciglesia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,9 @@
 # include <string.h>
 
 # define WACCESS "ft_ls: cannot access '%s': %s\n"
+# define WDIROP "ft_ls: cannot open directory '%s': %s\n"
+# define WLSTAT "ft_ls: lstat '%s': %s\n"
+# define NDIR 755
 
 typedef struct s_ls
 {
@@ -59,7 +62,6 @@ void	ft_ls(t_ls *ls);
 **		sort
 */
 
-void	strins(char ***array, char **str, size_t pos, size_t size);
 int		alpha_cmp(char *a, char *b);
 int		alpha_rev(char *a, char *b);
 int		time_cmp(char *a, char *b);

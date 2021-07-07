@@ -6,27 +6,21 @@
 /*   By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/04 01:07:09 by ciglesia          #+#    #+#             */
-/*   Updated: 2021/07/04 20:35:03 by ciglesia         ###   ########.fr       */
+/*   Updated: 2021/07/07 20:10:38 by ciglesia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ls.h"
-
-/*
-**	strins(&ls->files, &hola, 0, ls->size_f);
-*/
-
-void	strins(char ***array, char **str, size_t pos, size_t size)
-{
-	ft_memins((void **)array, str, sizeof(char *) * pos,
-		(t_sizes){sizeof(char *) * size, sizeof(char **)});
-}
 
 int	alpha_cmp(char *a, char *b)
 {
 	char	la;
 	char	lb;
 
+	if (*a == '.')
+		a++;
+	if (*b == '.')
+		b++;
 	while (*a && *b)
 	{
 		la = *a;
@@ -40,7 +34,7 @@ int	alpha_cmp(char *a, char *b)
 		a++;
 		b++;
 	}
-	return (0);
+	return ((*a - *b) < 0);
 }
 
 int	alpha_rev(char *a, char *b)
@@ -48,6 +42,10 @@ int	alpha_rev(char *a, char *b)
 	char	la;
 	char	lb;
 
+	if (*a == '.')
+		a++;
+	if (*b == '.')
+		b++;
 	while (*a && *b)
 	{
 		la = *a;
@@ -61,7 +59,7 @@ int	alpha_rev(char *a, char *b)
 		a++;
 		b++;
 	}
-	return (0);
+	return ((*a - *b) > 0);
 }
 
 int	time_cmp(char *a, char *b)
