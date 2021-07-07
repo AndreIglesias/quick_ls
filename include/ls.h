@@ -6,7 +6,7 @@
 /*   By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/29 19:12:52 by ciglesia          #+#    #+#             */
-/*   Updated: 2021/07/07 21:11:53 by ciglesia         ###   ########.fr       */
+/*   Updated: 2021/07/08 00:57:33 by ciglesia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ void	element_color(char *cont, struct stat buf);
 **	eval
 */
 
+int		last_slash(char *str);
 void	ft_ls(t_ls *ls);
 
 /*

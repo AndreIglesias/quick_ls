@@ -6,7 +6,7 @@
 /*   By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/03 13:53:36 by ciglesia          #+#    #+#             */
-/*   Updated: 2021/07/08 00:29:42 by ciglesia         ###   ########.fr       */
+/*   Updated: 2021/07/08 01:04:28 by ciglesia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,34 @@ void	print_files(char **files, t_u_char *flags, t_ls *ls)
 	}
 }
 
+int	last_slash(char *str)
+{
+	int	i;
+	int	slash;
+
+	i = 0;
+	slash = 0;
+	while (str[i])
+	{
+		if (str[i] == '/')
+			slash = i;
+		i++;
+	}
+	return (slash);
+}
+
 void	print_content(char content[][256], char *path, t_ls *ls, size_t size)
 {
 	size_t	i;
 	char	*file;
 	char	*tmp;
+	int		lslash;
 
 	i = 0;
+	lslash = last_slash(path);
 	while (i < size)
 	{
-		if (path[0] != '/')
+		if ((path[lslash + 1] && path[lslash] == '/') || !lslash)
 		{
 			file = ft_strjoin(path, "/");
 			tmp = file;
@@ -54,7 +72,7 @@ void	print_content(char content[][256], char *path, t_ls *ls, size_t size)
 		else
 			ft_putchar('\n');
 		free(file);
-		if (path[0] != '/')
+		if ((path[lslash + 1] && path[lslash] == '/') || !lslash)
 			free(tmp);
 		i++;
 	}
@@ -70,7 +88,7 @@ void	print_dir(DIR *dir, char *path, t_u_char *flags, t_ls *ls)
 	ft_bzero(content, sizeof(content));
 	dp = readdir(dir);
 	c = 0;
-	while (dp)
+	while (dp && c < NDIR)
 	{
 		str[0] = 0;
 		ft_strcat(str, dp->d_name);
