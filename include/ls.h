@@ -6,7 +6,7 @@
 /*   By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/29 19:12:52 by ciglesia          #+#    #+#             */
-/*   Updated: 2021/07/08 00:57:33 by ciglesia         ###   ########.fr       */
+/*   Updated: 2021/07/09 00:07:46 by ciglesia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,12 @@
 # include <dirent.h>
 # include <sys/stat.h>
 # include <string.h>
+# include <unistd.h>
 
 # define WACCESS "ft_ls: cannot access '%s': %s\n"
 # define WDIROP "ft_ls: cannot open directory '%s': %s\n"
 # define WLSTAT "ft_ls: lstat '%s': %s\n"
-# define NDIR 755
+# define NDIR 755//923
 
 typedef struct s_ls
 {
@@ -49,8 +50,8 @@ void	exit_ls(t_ls *ls, int status);
 int		is_dir(char *filename);
 int		is_file(char *filename);
 char	file_type(mode_t st_mode);
-void	print_element(char *cont, t_u_char *flags, t_ls *ls);
-void	element_color(char *cont, struct stat buf);
+void	print_element(char *cont, char *name, t_u_char *flags, t_ls *ls);
+void	element_color(char *cont, char *name, struct stat buf, t_u_char *flags);
 
 /*
 **	eval

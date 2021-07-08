@@ -6,7 +6,7 @@
 /*   By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/03 13:53:36 by ciglesia          #+#    #+#             */
-/*   Updated: 2021/07/08 01:04:28 by ciglesia         ###   ########.fr       */
+/*   Updated: 2021/07/08 23:27:05 by ciglesia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	print_files(char **files, t_u_char *flags, t_ls *ls)
 {
 	while (*files)
 	{
-		print_element(*files, flags, ls);
+		print_element(*files, *files, flags, ls);
 		if (!flags['l'] && *(files + 1))
 			ft_putstr("  ");
 		else
@@ -56,24 +56,28 @@ void	print_content(char content[][256], char *path, t_ls *ls, size_t size)
 
 	i = 0;
 	lslash = last_slash(path);
+	ft_printf("total\n");
 	while (i < size)
 	{
-		if ((path[lslash + 1] && path[lslash] == '/') || !lslash)
+		if (content[i][0] != '.' || (content[i][0] == '.' && ls->flags['a']))
 		{
-			file = ft_strjoin(path, "/");
-			tmp = file;
+			if ((path[lslash + 1] && path[lslash] == '/') || !lslash)
+			{
+				file = ft_strjoin(path, "/");
+				tmp = file;
+			}
+			else
+				file = path;
+			file = ft_strjoin(file, content[i]);
+			print_element(file, content[i], ls->flags, ls);
+			if (!ls->flags['l'] && (i + 1 < size))
+				ft_putstr("  ");
+			else
+				ft_putchar('\n');
+			free(file);
+			if ((path[lslash + 1] && path[lslash] == '/') || !lslash)
+				free(tmp);
 		}
-		else
-			file = path;
-		file = ft_strjoin(file, content[i]);
-		print_element(file, ls->flags, ls);
-		if (!ls->flags['l'] && (i + 1 < size))
-			ft_putstr("  ");
-		else
-			ft_putchar('\n');
-		free(file);
-		if ((path[lslash + 1] && path[lslash] == '/') || !lslash)
-			free(tmp);
 		i++;
 	}
 }
@@ -103,6 +107,8 @@ void	print_dir(DIR *dir, char *path, t_u_char *flags, t_ls *ls)
 		dp = readdir(dir);
 	}
 	print_content(content, path, ls, c);
+	// if c == NDIR -> print_dir
+	// print_dirs
 }
 
 void	print_dirs(char **dirs, t_u_char *flags, t_ls *ls)
