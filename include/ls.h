@@ -6,7 +6,7 @@
 /*   By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/29 19:12:52 by ciglesia          #+#    #+#             */
-/*   Updated: 2021/07/09 23:59:03 by ciglesia         ###   ########.fr       */
+/*   Updated: 2021/07/10 00:06:21 by ciglesia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ typedef struct s_ls
 	char		**files;
 	size_t		size_f;
 	t_u_char	flags[120];
+	t_byte		filerr;
 	int			total;
 	int			lslash;
 	int			link_count;

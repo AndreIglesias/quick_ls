@@ -6,7 +6,7 @@
 /*   By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/03 13:53:36 by ciglesia          #+#    #+#             */
-/*   Updated: 2021/07/09 23:59:08 by ciglesia         ###   ########.fr       */
+/*   Updated: 2021/07/10 00:09:51 by ciglesia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,6 +154,8 @@ void	print_dirs(char **dirs, t_u_char *flags, t_ls *ls)
 		dir = opendir(*dirs);
 		if (dir)
 		{
+			if (ls->size_f || ls->size_d > 1 || ls->filerr)
+				ft_printf("%s:\n", *dirs);
 			print_dir(dir, *dirs, flags, ls);
 			closedir(dir);
 		}

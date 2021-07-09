@@ -6,7 +6,7 @@
 /*   By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/04 20:41:42 by ciglesia          #+#    #+#             */
-/*   Updated: 2021/07/09 00:34:18 by ciglesia         ###   ########.fr       */
+/*   Updated: 2021/07/10 00:15:02 by ciglesia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ static void	color_link(char *cont, char *name, struct stat buf, t_u_char *flags)
 		ft_printf(BOLD"\e[96m%s"E0M" -> %s", name, buf2);
 	else
 		ft_printf(BOLD"\e[96m%s"E0M, name);
+	free(buf2);
 }
 
 void	element_color(char *cont, char *name, struct stat buf, t_u_char *flags)

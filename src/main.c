@@ -6,7 +6,7 @@
 /*   By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/29 19:31:42 by ciglesia          #+#    #+#             */
-/*   Updated: 2021/07/09 21:11:56 by ciglesia         ###   ########.fr       */
+/*   Updated: 2021/07/10 00:10:09 by ciglesia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ static int	input_handler(int ac, char **av, t_ls *ls)
 			else if (is_file(av[i]) > 0)
 				ls->files[ls->size_f++] = av[i];
 			else
-				ft_printf_fd(2, WACCESS, av[i], strerror(errno));
+				ls->filerr += ft_printf_fd(2, WACCESS, av[i], strerror(errno));
 		}
 		else if (av[i][0] == '-' && av[i][1] && !extract_flags(&av[i][1], ls))
 			return (0);
@@ -94,12 +94,13 @@ int	main(int ac, char **av)
 
 	ls.size_d = 0;
 	ls.size_f = 0;
+	ls.filerr = 0;
 	ft_bzero(ls.flags, sizeof(ls.flags));
 	ls.dirs = ft_calloc(ac, sizeof(char *));
 	ls.files = ft_calloc(ac, sizeof(char *));
 	if (!ls.dirs || !ls.files || !input_handler(ac - 1, &av[1], &ls))
 		exit_ls(&ls, EXIT_FAILURE);
-	if (!ls.dirs[0] && !ls.files[0])
+	if (!ls.dirs[0] && !ls.files[0] && !ls.filerr)
 		ls.dirs[0] = ".";
 	ft_ls(&ls);
 	exit_ls(&ls, EXIT_SUCCESS);
