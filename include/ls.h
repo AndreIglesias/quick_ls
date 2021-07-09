@@ -6,7 +6,7 @@
 /*   By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/29 19:12:52 by ciglesia          #+#    #+#             */
-/*   Updated: 2021/07/09 15:28:16 by ciglesia         ###   ########.fr       */
+/*   Updated: 2021/07/09 23:59:03 by ciglesia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,10 @@ typedef struct s_ls
 	char		**files;
 	size_t		size_f;
 	t_u_char	flags[120];
+	int			total;
+	int			lslash;
+	int			link_count;
+	int			file_size;
 }	t_ls;
 
 void	destructor(void)__attribute__((destructor));
@@ -65,6 +69,7 @@ void	ft_ls(t_ls *ls);
 **		sort
 */
 
+void	insert_content(char cont[][256], t_u_char *flags, size_t c, char *str);
 int		alpha_cmp(char *a, char *b);
 int		alpha_rev(char *a, char *b);
 int		time_cmp(char *a, char *b);

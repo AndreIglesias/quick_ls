@@ -6,11 +6,23 @@
 /*   By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/04 01:07:09 by ciglesia          #+#    #+#             */
-/*   Updated: 2021/07/07 20:10:38 by ciglesia         ###   ########.fr       */
+/*   Updated: 2021/07/09 21:35:54 by ciglesia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ls.h"
+
+void	insert_content(char cont[][256], t_u_char *flags, size_t c, char *str)
+{
+	if (flags['r'] && !flags['t'])
+		binsert(cont, str, c, &alpha_rev);
+	else if (flags['r'] && flags['t'])
+		binsert(cont, str, c, &time_rev);
+	else if (flags['t'])
+		binsert(cont, str, c, &time_cmp);
+	else
+		binsert(cont, str, c, &alpha_cmp);
+}
 
 int	alpha_cmp(char *a, char *b)
 {

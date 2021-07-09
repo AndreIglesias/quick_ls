@@ -6,7 +6,7 @@
 /*   By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/04 20:31:31 by ciglesia          #+#    #+#             */
-/*   Updated: 2021/07/09 20:06:12 by ciglesia         ###   ########.fr       */
+/*   Updated: 2021/07/09 23:57:52 by ciglesia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,11 @@ static void	print_user(uid_t st_uid, t_ls *ls)
 	ft_printf("%5s ", user->pw_name);
 }
 
-static void	print_permissions(mode_t st_mode)
+static void	print_permissions(mode_t st_mode, int context)
 {
 	static const char	*rwx[8] = {"---", "--x", "-w-", "-wx",
 								"r--", "r-x", "rw-", "rwx"};
-	char				bits[10];
+	char				bits[11];
 
 	ft_strcpy(bits, rwx[(st_mode >> 6) & 7]);
 	ft_strcpy(bits + 3, rwx[(st_mode >> 3) & 7]);
@@ -60,7 +60,10 @@ static void	print_permissions(mode_t st_mode)
 		bits[8] = 'T';
 	if (st_mode & S_ISVTX && st_mode & S_IXOTH)
 		bits[8] = 't';
-	bits[9] = 0;
+	bits[9] = ' ';
+	if (context)
+		bits[9] = '.';
+	bits[10] = 0;
 	ft_putstr(bits);
 }
 
@@ -77,15 +80,13 @@ void	print_element(char *cont, char *name, t_u_char *flags, t_ls *ls)
 	}
 	if (flags['l'])
 	{
-		print_permissions(buf.st_mode);
-		if (getfilecon(cont, &sc) > 0)
-			ft_putstr(". ");
-		else
-			ft_putstr("  ");
-		ft_printf("%4lu ", buf.st_nlink);
+		print_permissions(buf.st_mode, (getfilecon(cont, &sc) > 0));
+		ft_repet(' ', ls->link_count - ft_sizei(buf.st_nlink) + 1);
+		ft_printf("%lu ", buf.st_nlink);
 		print_user(buf.st_uid, ls);
 		print_grp(buf.st_gid, ls);
-		ft_printf("%7lu ", buf.st_size);
+		ft_repet(' ', ls->file_size - ft_sizei(buf.st_size));
+		ft_printf("%lu ", buf.st_size);
 		ft_printf("%.12s ", &ctime(&buf.st_mtime)[4]);
 	}
 	element_color(cont, name, buf, flags);

@@ -6,7 +6,7 @@
 /*   By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/03 13:53:36 by ciglesia          #+#    #+#             */
-/*   Updated: 2021/07/09 20:12:44 by ciglesia         ###   ########.fr       */
+/*   Updated: 2021/07/09 23:59:08 by ciglesia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,24 @@ void	print_files(char **files, t_u_char *flags, t_ls *ls)
 	}
 }
 
+char	*path_file(char *path, char *name, t_ls *ls)
+{
+	char	*tmp;
+	char	*file;
+
+	if ((path[ls->lslash + 1] && path[ls->lslash] == '/') || !ls->lslash)
+	{
+		file = ft_strjoin(path, "/");
+		tmp = file;
+	}
+	else
+		file = path;
+	file = ft_strjoin(file, name);
+	if ((path[ls->lslash + 1] && path[ls->lslash] == '/') || !ls->lslash)
+		free(tmp);
+	return (file);
+}
+
 int	last_slash(char *str)
 {
 	int	i;
@@ -51,36 +69,53 @@ void	print_content(char content[][256], char *path, t_ls *ls, size_t size)
 {
 	size_t	i;
 	char	*file;
-	char	*tmp;
-	int		lslash;
 
 	i = 0;
-	lslash = last_slash(path);
 	if (ls->flags['l'])
-		ft_printf("total\n");
+		ft_printf("total %d\n", ls->total / 2);
 	while (i < size)
 	{
-		if (content[i][0] != '.' || (content[i][0] == '.' && ls->flags['a']))
-		{
-			if ((path[lslash + 1] && path[lslash] == '/') || !lslash)
-			{
-				file = ft_strjoin(path, "/");
-				tmp = file;
-			}
-			else
-				file = path;
-			file = ft_strjoin(file, content[i]);
-			print_element(file, content[i], ls->flags, ls);
-			if (!ls->flags['l'] && (i + 1 < size))
-				ft_putstr("  ");
-			else
-				ft_putchar('\n');
-			free(file);
-			if ((path[lslash + 1] && path[lslash] == '/') || !lslash)
-				free(tmp);
-		}
+		file = path_file(path, content[i], ls);
+		print_element(file, content[i], ls->flags, ls);
+		if (!ls->flags['l'] && (i + 1 < size))
+			ft_putstr("  ");
+		else
+			ft_putchar('\n');
+		free(file);
 		i++;
 	}
+}
+
+int		measure_dir(char *name, char *path, t_ls *ls)
+{
+	struct stat			buf;
+	char				*file;
+	int					file_size;
+	int					link_count;
+
+	file = path_file(path, name, ls);
+	ft_memset(&buf, 0, sizeof(struct stat *));
+	if (lstat(file, &buf) == -1)
+	{
+		ft_printf_fd(2, WLSTAT, name, strerror(errno));
+		exit_ls(ls, EXIT_FAILURE);
+	}
+	free(file);
+	file_size = ft_sizei(buf.st_size);
+	if (file_size > ls->file_size)
+		ls->file_size = file_size;
+	link_count = ft_sizei(buf.st_nlink);
+	if (link_count > ls->link_count)
+		ls->link_count = link_count;
+	return (buf.st_blocks);
+}
+
+void	init_lsdir(char *path, t_ls *ls)
+{
+	ls->total = 0;
+	ls->lslash = last_slash(path);
+	ls->link_count = 0;
+	ls->file_size = 0;
 }
 
 void	print_dir(DIR *dir, char *path, t_u_char *flags, t_ls *ls)
@@ -93,22 +128,19 @@ void	print_dir(DIR *dir, char *path, t_u_char *flags, t_ls *ls)
 	ft_bzero(content, sizeof(content));
 	dp = readdir(dir);
 	c = 0;
+	init_lsdir(path, ls);
 	while (dp && c < NDIR)
 	{
 		str[0] = 0;
 		ft_strcat(str, dp->d_name);
-		if (flags['r'] && !flags['t'])
-			binsert(content, str, c++, &alpha_rev);
-		else if (flags['r'] && flags['t'])
-			binsert(content, str, c++, &time_rev);
-		else if (flags['t'])
-			binsert(content, str, c++, &time_cmp);
-		else
-			binsert(content, str, c++, &alpha_cmp);
+		if (str[0] != '.' || (str[0] == '.' && flags['a']))
+		{
+			insert_content(content, flags, c++, str);
+			ls->total += measure_dir(str, path, ls);
+		}
 		dp = readdir(dir);
 	}
 	print_content(content, path, ls, c);
-	// if c == NDIR -> print_dir
 	// print_dirs
 }
 
