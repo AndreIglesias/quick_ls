@@ -6,7 +6,7 @@
 /*   By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/03 13:53:36 by ciglesia          #+#    #+#             */
-/*   Updated: 2021/07/08 23:27:05 by ciglesia         ###   ########.fr       */
+/*   Updated: 2021/07/09 20:12:44 by ciglesia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ void	print_content(char content[][256], char *path, t_ls *ls, size_t size)
 
 	i = 0;
 	lslash = last_slash(path);
-	ft_printf("total\n");
+	if (ls->flags['l'])
+		ft_printf("total\n");
 	while (i < size)
 	{
 		if (content[i][0] != '.' || (content[i][0] == '.' && ls->flags['a']))

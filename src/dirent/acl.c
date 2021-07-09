@@ -6,7 +6,7 @@
 /*   By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/04 20:31:31 by ciglesia          #+#    #+#             */
-/*   Updated: 2021/07/09 01:04:48 by ciglesia         ###   ########.fr       */
+/*   Updated: 2021/07/09 20:06:12 by ciglesia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,24 +42,32 @@ static void	print_permissions(mode_t st_mode)
 {
 	static const char	*rwx[8] = {"---", "--x", "-w-", "-wx",
 								"r--", "r-x", "rw-", "rwx"};
+	char				bits[10];
 
-	ft_printf("%c%s%s%s ", file_type(st_mode),
-		rwx[(st_mode >> 6) & 7],
-		rwx[(st_mode >> 3) & 7],
-		rwx[st_mode & 7]);
-	/*if (mode & S_ISUID)
-        bits[3] = (mode & S_IXUSR) ? 's' : 'S';
-    if (mode & S_ISGID)
-        bits[6] = (mode & S_IXGRP) ? 's' : 'l';
-    if (mode & S_ISVTX)
-	bits[9] = (mode & S_IXOTH) ? 't' : 'T';*/
+	ft_strcpy(bits, rwx[(st_mode >> 6) & 7]);
+	ft_strcpy(bits + 3, rwx[(st_mode >> 3) & 7]);
+	ft_strcpy(bits + 6, rwx[st_mode & 7]);
+	ft_putchar(file_type(st_mode));
+	if (st_mode & S_ISUID)
+		bits[2] = 'S';
+	if (st_mode & S_ISUID && st_mode & S_IXUSR)
+		bits[2] = 's';
+	if (st_mode & S_ISGID)
+		bits[5] = 'l';
+	if (st_mode & S_ISGID && st_mode & S_IXGRP)
+		bits[5] = 's';
 	if (st_mode & S_ISVTX)
-		ft_putchar('.');
+		bits[8] = 'T';
+	if (st_mode & S_ISVTX && st_mode & S_IXOTH)
+		bits[8] = 't';
+	bits[9] = 0;
+	ft_putstr(bits);
 }
 
 void	print_element(char *cont, char *name, t_u_char *flags, t_ls *ls)
 {
-	struct stat	buf;
+	struct stat			buf;
+	security_context_t	sc;
 
 	ft_memset(&buf, 0, sizeof(struct stat *));
 	if (lstat(cont, &buf) == -1)
@@ -70,6 +78,10 @@ void	print_element(char *cont, char *name, t_u_char *flags, t_ls *ls)
 	if (flags['l'])
 	{
 		print_permissions(buf.st_mode);
+		if (getfilecon(cont, &sc) > 0)
+			ft_putstr(". ");
+		else
+			ft_putstr("  ");
 		ft_printf("%4lu ", buf.st_nlink);
 		print_user(buf.st_uid, ls);
 		print_grp(buf.st_gid, ls);

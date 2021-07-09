@@ -6,7 +6,7 @@
 #    By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/05/20 17:00:07 by ciglesia          #+#    #+#              #
-#    Updated: 2021/07/04 20:43:21 by ciglesia         ###   ########.fr        #
+#    Updated: 2021/07/09 19:48:40 by ciglesia         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -24,7 +24,7 @@ LIBSTD		=	$(LIB)/libstd/
 LIBSTR		=	$(LIB)/libstring/
 LIBALG		=	$(LIB)/libalgorithm/
 
-INC_LIB		=	-L$(LIBALG) -lalgorithm -L$(LIBSTD) -lstd -L$(LIBSTR) -lstring
+INC_LIB		=	-lselinux -L$(LIBALG) -lalgorithm -L$(LIBSTD) -lstd -L$(LIBSTR) -lstring
 
 INCLUDE		=	-O3 -I $(INC) -I $(LIBINC)
 
@@ -120,6 +120,9 @@ re		:		fclean all
 
 ftlib	:
 				@(cd $(LIB) && $(MAKE))
+
+apt		:
+				sudo apt-get install libselinux1-dev
 
 .PHONY	:		all clean fclean re ftlib
 

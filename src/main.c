@@ -6,7 +6,7 @@
 /*   By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/29 19:31:42 by ciglesia          #+#    #+#             */
-/*   Updated: 2021/07/08 21:18:14 by ciglesia         ###   ########.fr       */
+/*   Updated: 2021/07/09 20:10:56 by ciglesia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,8 @@ int	main(int ac, char **av)
 	ls.files = ft_calloc(ac, sizeof(char *));
 	if (!ls.dirs || !ls.files || !input_handler(ac - 1, &av[1], &ls))
 		exit_ls(&ls, EXIT_FAILURE);
+	if (!ls.dirs[0] && !ls.files[0])
+		ls.dirs[0] = ".";
 	ft_ls(&ls);
 	exit_ls(&ls, EXIT_SUCCESS);
 	return (EXIT_SUCCESS);

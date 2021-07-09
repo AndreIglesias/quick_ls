@@ -6,7 +6,7 @@
 /*   By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/29 19:12:52 by ciglesia          #+#    #+#             */
-/*   Updated: 2021/07/09 00:07:46 by ciglesia         ###   ########.fr       */
+/*   Updated: 2021/07/09 15:28:16 by ciglesia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <sys/stat.h>
 # include <string.h>
 # include <unistd.h>
+# include <selinux/selinux.h>
 
 # define WACCESS "ft_ls: cannot access '%s': %s\n"
 # define WDIROP "ft_ls: cannot open directory '%s': %s\n"
