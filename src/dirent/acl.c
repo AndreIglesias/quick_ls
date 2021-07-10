@@ -6,36 +6,32 @@
 /*   By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/04 20:31:31 by ciglesia          #+#    #+#             */
-/*   Updated: 2021/07/10 19:08:40 by ciglesia         ###   ########.fr       */
+/*   Updated: 2021/07/10 23:37:58 by ciglesia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ls.h"
 
-static void	print_grp(gid_t st_gid, t_ls *ls)
+static void	print_grp(gid_t st_gid)
 {
 	struct group	*grp;
 
 	grp = getgrgid(st_gid);
 	if (grp == NULL)
-	{
-		perror("getgrgid");
-		exit_ls(ls, EXIT_FAILURE);
-	}
-	ft_printf("%5s ", grp->gr_name);
+		ft_printf("%5d", st_gid);
+	else
+		ft_printf("%5s ", grp->gr_name);
 }
 
-static void	print_user(uid_t st_uid, t_ls *ls)
+static void	print_user(uid_t st_uid)
 {
 	struct passwd	*user;
 
 	user = getpwuid(st_uid);
 	if (user == NULL)
-	{
-		perror("getpwuid");
-		exit_ls(ls, EXIT_FAILURE);
-	}
-	ft_printf("%5s ", user->pw_name);
+		ft_printf("%5d ", st_uid);
+	else
+		ft_printf("%5s ", user->pw_name);
 }
 
 static char	*print_permissions(mode_t st_mode, int context, char *cont)
@@ -108,8 +104,8 @@ void	print_element(char *cont, char *name, t_u_char *flags, t_ls *ls)
 		ft_putstr(rwx);
 		ft_repet(' ', ls->link_count - ft_sizei(buf.st_nlink) + 1);
 		ft_printf("%lu ", buf.st_nlink);
-		print_user(buf.st_uid, ls);
-		print_grp(buf.st_gid, ls);
+		print_user(buf.st_uid);
+		print_grp(buf.st_gid);
 		major_minor(buf.st_rdev, buf.st_size, ls);
 		ft_printf("%.12s ", &ctime(&buf.st_mtime)[4]);
 	}

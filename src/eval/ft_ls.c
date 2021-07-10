@@ -6,17 +6,11 @@
 /*   By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/03 13:53:36 by ciglesia          #+#    #+#             */
-/*   Updated: 2021/07/10 21:45:31 by ciglesia         ###   ########.fr       */
+/*   Updated: 2021/07/10 23:11:04 by ciglesia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ls.h"
-
-/*
-**	TODO
-**		files+dirs array
-**		sort files, dirs, files+dirs array
-*/
 
 void	print_files(char **files, t_u_char *flags, t_ls *ls)
 {
@@ -36,7 +30,8 @@ char	*path_file(char *path, char *name, int lslash)
 	char	*tmp;
 	char	*file;
 
-	if ((path[lslash + 1] && path[lslash] == '/') || !lslash)
+	if ((path[lslash + 1] && path[lslash] == '/')
+		|| (!lslash && path[0] != '/'))
 	{
 		file = ft_strjoin(path, "/");
 		tmp = file;
@@ -44,7 +39,8 @@ char	*path_file(char *path, char *name, int lslash)
 	else
 		file = path;
 	file = ft_strjoin(file, name);
-	if ((path[lslash + 1] && path[lslash] == '/') || !lslash)
+	if ((path[lslash + 1] && path[lslash] == '/')
+		|| (!lslash && path[0] != '/'))
 		free(tmp);
 	return (file);
 }
@@ -158,7 +154,7 @@ void	print_recursive(char dirs[][256], size_t c, char *path, t_ls *ls)
 	while (i < c)
 	{
 		file = path_file(path, dirs[i], lslash);
-		if (is_dir(file) && !is_dot(dirs[i]))
+		if (is_file(file) == -1 && is_dir(file) && !is_dot(dirs[i]))
 		{
 			dir = opendir(file);
 			if (dir)
