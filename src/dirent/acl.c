@@ -6,7 +6,7 @@
 /*   By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/04 20:31:31 by ciglesia          #+#    #+#             */
-/*   Updated: 2021/07/09 23:57:52 by ciglesia         ###   ########.fr       */
+/*   Updated: 2021/07/10 19:08:40 by ciglesia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,39 +38,63 @@ static void	print_user(uid_t st_uid, t_ls *ls)
 	ft_printf("%5s ", user->pw_name);
 }
 
-static void	print_permissions(mode_t st_mode, int context)
+static char	*print_permissions(mode_t st_mode, int context, char *cont)
 {
 	static const char	*rwx[8] = {"---", "--x", "-w-", "-wx",
 								"r--", "r-x", "rw-", "rwx"};
-	char				bits[11];
+	static char			bits[12] = {0};
 
-	ft_strcpy(bits, rwx[(st_mode >> 6) & 7]);
-	ft_strcpy(bits + 3, rwx[(st_mode >> 3) & 7]);
-	ft_strcpy(bits + 6, rwx[st_mode & 7]);
-	ft_putchar(file_type(st_mode));
+	bits[0] = file_type(st_mode);
+	ft_strcpy(bits + 1, rwx[(st_mode >> 6) & 7]);
+	ft_strcpy(bits + 4, rwx[(st_mode >> 3) & 7]);
+	ft_strcpy(bits + 7, rwx[st_mode & 7]);
 	if (st_mode & S_ISUID)
-		bits[2] = 'S';
+		bits[3] = 'S';
 	if (st_mode & S_ISUID && st_mode & S_IXUSR)
-		bits[2] = 's';
+		bits[3] = 's';
 	if (st_mode & S_ISGID)
-		bits[5] = 'l';
+		bits[6] = 'S';
 	if (st_mode & S_ISGID && st_mode & S_IXGRP)
-		bits[5] = 's';
+		bits[6] = 's';
 	if (st_mode & S_ISVTX)
-		bits[8] = 'T';
+		bits[9] = 'T';
 	if (st_mode & S_ISVTX && st_mode & S_IXOTH)
-		bits[8] = 't';
-	bits[9] = ' ';
-	if (context)
-		bits[9] = '.';
-	bits[10] = 0;
-	ft_putstr(bits);
+		bits[9] = 't';
+	bits[10] = ' ';
+	if (listxattr(cont, NULL, 0) > 0)
+		bits[10] = '+';
+	bits[10] = (context) * '.' + (!context) * bits[10];
+	return (bits);
+}
+
+void	major_minor(dev_t st_rdev, off_t st_size, t_ls *ls)
+{
+	t_byte			mm;
+	unsigned int	major;
+	unsigned int	minor;
+
+	major = major(st_rdev);
+	minor = minor(st_rdev);
+	mm = (major || minor);
+	if (mm)
+	{
+		ft_printf("%4d,", major);
+		ft_repet(' ', ls->file_size - ft_sizei(minor));
+		ft_printf("%d ", minor);
+	}
+	else
+	{
+		ft_putstr("     ");
+		ft_repet(' ', ls->file_size - ft_sizei(st_size));
+		ft_printf("%lu ", st_size);
+	}
 }
 
 void	print_element(char *cont, char *name, t_u_char *flags, t_ls *ls)
 {
 	struct stat			buf;
 	security_context_t	sc;
+	char				*rwx;
 
 	ft_memset(&buf, 0, sizeof(struct stat *));
 	if (lstat(cont, &buf) == -1)
@@ -80,13 +104,13 @@ void	print_element(char *cont, char *name, t_u_char *flags, t_ls *ls)
 	}
 	if (flags['l'])
 	{
-		print_permissions(buf.st_mode, (getfilecon(cont, &sc) > 0));
+		rwx = print_permissions(buf.st_mode, (getfilecon(cont, &sc) > 0), cont);
+		ft_putstr(rwx);
 		ft_repet(' ', ls->link_count - ft_sizei(buf.st_nlink) + 1);
 		ft_printf("%lu ", buf.st_nlink);
 		print_user(buf.st_uid, ls);
 		print_grp(buf.st_gid, ls);
-		ft_repet(' ', ls->file_size - ft_sizei(buf.st_size));
-		ft_printf("%lu ", buf.st_size);
+		major_minor(buf.st_rdev, buf.st_size, ls);
 		ft_printf("%.12s ", &ctime(&buf.st_mtime)[4]);
 	}
 	element_color(cont, name, buf, flags);

@@ -6,7 +6,7 @@
 #    By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/05/20 17:00:07 by ciglesia          #+#    #+#              #
-#    Updated: 2021/07/09 19:48:40 by ciglesia         ###   ########.fr        #
+#    Updated: 2021/07/10 17:40:38 by ciglesia         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -123,6 +123,8 @@ ftlib	:
 
 apt		:
 				sudo apt-get install libselinux1-dev
+				sudo apt-get install libacl1-dev
+
 
 .PHONY	:		all clean fclean re ftlib
 
