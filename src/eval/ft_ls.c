@@ -6,7 +6,7 @@
 /*   By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/03 13:53:36 by ciglesia          #+#    #+#             */
-/*   Updated: 2021/07/10 00:09:51 by ciglesia         ###   ########.fr       */
+/*   Updated: 2021/07/10 21:45:31 by ciglesia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,12 @@ void	print_files(char **files, t_u_char *flags, t_ls *ls)
 	}
 }
 
-char	*path_file(char *path, char *name, t_ls *ls)
+char	*path_file(char *path, char *name, int lslash)
 {
 	char	*tmp;
 	char	*file;
 
-	if ((path[ls->lslash + 1] && path[ls->lslash] == '/') || !ls->lslash)
+	if ((path[lslash + 1] && path[lslash] == '/') || !lslash)
 	{
 		file = ft_strjoin(path, "/");
 		tmp = file;
@@ -44,7 +44,7 @@ char	*path_file(char *path, char *name, t_ls *ls)
 	else
 		file = path;
 	file = ft_strjoin(file, name);
-	if ((path[ls->lslash + 1] && path[ls->lslash] == '/') || !ls->lslash)
+	if ((path[lslash + 1] && path[lslash] == '/') || !lslash)
 		free(tmp);
 	return (file);
 }
@@ -75,7 +75,7 @@ void	print_content(char content[][256], char *path, t_ls *ls, size_t size)
 		ft_printf("total %d\n", ls->total / 2);
 	while (i < size)
 	{
-		file = path_file(path, content[i], ls);
+		file = path_file(path, content[i], ls->lslash);
 		print_element(file, content[i], ls->flags, ls);
 		if (!ls->flags['l'] && (i + 1 < size))
 			ft_putstr("  ");
@@ -86,18 +86,18 @@ void	print_content(char content[][256], char *path, t_ls *ls, size_t size)
 	}
 }
 
-int		measure_dir(char *name, char *path, t_ls *ls)
+int	measure_dir(char *name, char *path, t_ls *ls)
 {
 	struct stat			buf;
 	char				*file;
 	int					file_size;
 	int					link_count;
 
-	file = path_file(path, name, ls);
+	file = path_file(path, name, ls->lslash);
 	ft_memset(&buf, 0, sizeof(struct stat *));
 	if (lstat(file, &buf) == -1)
 	{
-		ft_printf_fd(2, WLSTAT, name, strerror(errno));
+		ft_printf_fd(2, WLSTAT, file, strerror(errno));
 		exit_ls(ls, EXIT_FAILURE);
 	}
 	free(file);
@@ -110,10 +110,10 @@ int		measure_dir(char *name, char *path, t_ls *ls)
 	return (buf.st_blocks);
 }
 
-void	init_lsdir(char *path, t_ls *ls)
+void	init_lsdir(t_ls *ls, int lslash)
 {
 	ls->total = 0;
-	ls->lslash = last_slash(path);
+	ls->lslash = lslash;
 	ls->link_count = 0;
 	ls->file_size = 0;
 }
@@ -128,7 +128,7 @@ void	print_dir(DIR *dir, char *path, t_u_char *flags, t_ls *ls)
 	ft_bzero(content, sizeof(content));
 	dp = readdir(dir);
 	c = 0;
-	init_lsdir(path, ls);
+	init_lsdir(ls, last_slash(path));
 	while (dp && c < NDIR)
 	{
 		str[0] = 0;
@@ -141,7 +141,40 @@ void	print_dir(DIR *dir, char *path, t_u_char *flags, t_ls *ls)
 		dp = readdir(dir);
 	}
 	print_content(content, path, ls, c);
-	// print_dirs
+	if (flags['R'])
+		print_recursive(content, c, path, ls);
+}
+
+void	print_recursive(char dirs[][256], size_t c, char *path, t_ls *ls)
+{
+	DIR		*dir;
+	size_t	i;
+	char	*file;
+	int		lslash;
+
+	lslash = last_slash(path);
+	i = 0;
+	ft_putchar('\n');
+	while (i < c)
+	{
+		file = path_file(path, dirs[i], lslash);
+		if (is_dir(file) && !is_dot(dirs[i]))
+		{
+			dir = opendir(file);
+			if (dir)
+			{
+				ft_printf("%s:\n", file);
+				print_dir(dir, file, ls->flags, ls);
+				closedir(dir);
+			}
+			else
+				ft_printf_fd(2, WDIROP, *dirs, strerror(errno));
+		}
+		else if (is_file(file) <= 0)
+			ft_printf_fd(2, WACCESS"\n", file, strerror(errno));
+		free(file);
+		i++;
+	}
 }
 
 void	print_dirs(char **dirs, t_u_char *flags, t_ls *ls)
@@ -150,11 +183,10 @@ void	print_dirs(char **dirs, t_u_char *flags, t_ls *ls)
 
 	while (*dirs)
 	{
-		//if (is_dir(dp->d_name))
 		dir = opendir(*dirs);
 		if (dir)
 		{
-			if (ls->size_f || ls->size_d > 1 || ls->filerr)
+			if (ls->size_f || ls->size_d > 1 || ls->filerr || flags['R'])
 				ft_printf("%s:\n", *dirs);
 			print_dir(dir, *dirs, flags, ls);
 			closedir(dir);
@@ -162,6 +194,8 @@ void	print_dirs(char **dirs, t_u_char *flags, t_ls *ls)
 		else
 			ft_printf_fd(2, WDIROP, *dirs, strerror(errno));
 		dirs++;
+		if (*dirs)
+			ft_putchar('\n');
 	}
 }
 
@@ -188,5 +222,5 @@ void	ft_ls(t_ls *ls)
 		strquick(ls->dirs, ls->size_d, &alpha_cmp);
 	}
 	print_files(ls->files, ls->flags, ls);
-	print_dirs(ls->dirs, ls->flags, ls);//
+	print_dirs(ls->dirs, ls->flags, ls);
 }

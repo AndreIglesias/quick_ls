@@ -6,7 +6,7 @@
 /*   By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/29 19:12:52 by ciglesia          #+#    #+#             */
-/*   Updated: 2021/07/10 18:57:39 by ciglesia         ###   ########.fr       */
+/*   Updated: 2021/07/10 21:44:12 by ciglesia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ void	exit_ls(t_ls *ls, int status);
 **	dirent
 */
 
+int		is_dot(char *name);
 int		is_dir(char *filename);
 int		is_file(char *filename);
 char	file_type(mode_t st_mode);
@@ -65,6 +66,7 @@ void	element_color(char *cont, char *name, struct stat buf, t_u_char *flags);
 **	eval
 */
 
+void	print_recursive(char dirs[][256], size_t c, char *path, t_ls *ls);
 int		last_slash(char *str);
 void	ft_ls(t_ls *ls);
 

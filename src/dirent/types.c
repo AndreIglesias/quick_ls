@@ -6,7 +6,7 @@
 /*   By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/02 23:44:07 by ciglesia          #+#    #+#             */
-/*   Updated: 2021/07/04 20:35:29 by ciglesia         ###   ########.fr       */
+/*   Updated: 2021/07/10 21:33:53 by ciglesia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,16 @@ char	file_type(mode_t st_mode)
 	if (S_ISFIFO(st_mode))
 		return ('p');
 	return ('?');
+}
+
+int	is_dot(char	*name)
+{
+	if (name[0] == '.')
+	{
+		if (!name[1])
+			return (1);
+		if (name[1] == '.' && !name[2])
+			return (1);
+	}
+	return (0);
 }
