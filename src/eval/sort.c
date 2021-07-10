@@ -6,20 +6,22 @@
 /*   By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/04 01:07:09 by ciglesia          #+#    #+#             */
-/*   Updated: 2021/07/04 01:15:42 by ciglesia         ###   ########.fr       */
+/*   Updated: 2021/07/09 21:35:54 by ciglesia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ls.h"
 
-/*
-**	strins(&ls->files, &hola, 0, ls->size_f);
-*/
-
-void	strins(char ***array, char **str, size_t pos, size_t size)
+void	insert_content(char cont[][256], t_u_char *flags, size_t c, char *str)
 {
-	ft_memins((void**)array, str, sizeof(char *) * pos,
-			  (t_sizes){sizeof(char *) * size, sizeof(char **)});
+	if (flags['r'] && !flags['t'])
+		binsert(cont, str, c, &alpha_rev);
+	else if (flags['r'] && flags['t'])
+		binsert(cont, str, c, &time_rev);
+	else if (flags['t'])
+		binsert(cont, str, c, &time_cmp);
+	else
+		binsert(cont, str, c, &alpha_cmp);
 }
 
 int	alpha_cmp(char *a, char *b)
@@ -27,6 +29,10 @@ int	alpha_cmp(char *a, char *b)
 	char	la;
 	char	lb;
 
+	if (*a == '.')
+		a++;
+	if (*b == '.')
+		b++;
 	while (*a && *b)
 	{
 		la = *a;
@@ -40,7 +46,7 @@ int	alpha_cmp(char *a, char *b)
 		a++;
 		b++;
 	}
-	return (0);
+	return ((*a - *b) < 0);
 }
 
 int	alpha_rev(char *a, char *b)
@@ -48,6 +54,10 @@ int	alpha_rev(char *a, char *b)
 	char	la;
 	char	lb;
 
+	if (*a == '.')
+		a++;
+	if (*b == '.')
+		b++;
 	while (*a && *b)
 	{
 		la = *a;
@@ -61,7 +71,7 @@ int	alpha_rev(char *a, char *b)
 		a++;
 		b++;
 	}
-	return (0);
+	return ((*a - *b) > 0);
 }
 
 int	time_cmp(char *a, char *b)
