@@ -6,7 +6,7 @@
 /*   By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/29 19:31:42 by ciglesia          #+#    #+#             */
-/*   Updated: 2021/07/10 00:10:09 by ciglesia         ###   ########.fr       */
+/*   Updated: 2021/07/10 23:48:09 by ciglesia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,8 +105,4 @@ int	main(int ac, char **av)
 	ft_ls(&ls);
 	exit_ls(&ls, EXIT_SUCCESS);
 	return (EXIT_SUCCESS);
-}
-
-void	destructor(void)
-{
 }

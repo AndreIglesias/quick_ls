@@ -6,7 +6,7 @@
 /*   By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/29 19:12:52 by ciglesia          #+#    #+#             */
-/*   Updated: 2021/07/10 21:44:12 by ciglesia         ###   ########.fr       */
+/*   Updated: 2021/07/11 00:21:25 by ciglesia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ typedef struct s_ls
 	int			file_size;
 }	t_ls;
 
-void	destructor(void)__attribute__((destructor));
 void	exit_ls(t_ls *ls, int status);
 
 /*
@@ -66,9 +65,20 @@ void	element_color(char *cont, char *name, struct stat buf, t_u_char *flags);
 **	eval
 */
 
-void	print_recursive(char dirs[][256], size_t c, char *path, t_ls *ls);
+int		measure_dir(char *name, char *path, t_ls *ls);
+void	init_lsdir(t_ls *ls, int lslash);
+char	*path_file(char *path, char *name, int lslash);
 int		last_slash(char *str);
 void	ft_ls(t_ls *ls);
+
+/*
+**		surfing
+*/
+
+void	print_dirs(char **dirs, t_u_char *flags, t_ls *ls);
+void	print_dir(DIR *dir, char *path, t_u_char *flags, t_ls *ls);
+void	print_files(char **files, t_u_char *flags, t_ls *ls);
+void	print_recursive(char dirs[][256], size_t c, char *path, t_ls *ls);
 
 /*
 **		sort

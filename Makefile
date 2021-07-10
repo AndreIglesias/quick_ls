@@ -6,7 +6,7 @@
 #    By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/05/20 17:00:07 by ciglesia          #+#    #+#              #
-#    Updated: 2021/07/10 17:40:38 by ciglesia         ###   ########.fr        #
+#    Updated: 2021/07/10 23:54:05 by ciglesia         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -36,7 +36,7 @@ DIREVAL		=	$(DIRSRC)/eval/
 
 SRC			=	main.c
 DRNT		=	types.c acl.c color.c
-EVAL		=	ft_ls.c sort.c
+EVAL		=	ft_ls.c sort.c surfing.c
 
 SRCS		=	$(SRC) $(DRNT) $(EVAL)
 
