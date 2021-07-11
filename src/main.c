@@ -6,13 +6,13 @@
 /*   By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/29 19:31:42 by ciglesia          #+#    #+#             */
-/*   Updated: 2021/07/11 06:00:45 by ciglesia         ###   ########.fr       */
+/*   Updated: 2021/07/11 06:51:48 by ciglesia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ls.h"
 
-void	exit_ls(t_ls *ls, int status)
+static void	exit_ls(t_ls *ls, int status)
 {
 	free(ls->dirs);
 	free(ls->files);

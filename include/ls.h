@@ -6,7 +6,7 @@
 /*   By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/29 19:12:52 by ciglesia          #+#    #+#             */
-/*   Updated: 2021/07/11 00:21:25 by ciglesia         ###   ########.fr       */
+/*   Updated: 2021/07/11 06:51:36 by ciglesia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,6 @@ typedef struct s_ls
 	int			link_count;
 	int			file_size;
 }	t_ls;
-
-void	exit_ls(t_ls *ls, int status);
 
 /*
 **	dirent

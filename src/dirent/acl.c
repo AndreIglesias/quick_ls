@@ -6,7 +6,7 @@
 /*   By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/04 20:31:31 by ciglesia          #+#    #+#             */
-/*   Updated: 2021/07/10 23:37:58 by ciglesia         ###   ########.fr       */
+/*   Updated: 2021/07/11 06:51:13 by ciglesia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ void	print_element(char *cont, char *name, t_u_char *flags, t_ls *ls)
 	if (lstat(cont, &buf) == -1)
 	{
 		ft_printf_fd(2, WLSTAT, cont, strerror(errno));
-		exit_ls(ls, EXIT_FAILURE);
+		return ;
 	}
 	if (flags['l'])
 	{

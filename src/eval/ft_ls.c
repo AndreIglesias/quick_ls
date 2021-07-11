@@ -6,7 +6,7 @@
 /*   By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/03 13:53:36 by ciglesia          #+#    #+#             */
-/*   Updated: 2021/07/11 06:05:13 by ciglesia         ###   ########.fr       */
+/*   Updated: 2021/07/11 06:50:49 by ciglesia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	measure_dir(char *name, char *path, t_ls *ls)
 	if (lstat(file, &buf) == -1)
 	{
 		ft_printf_fd(2, WLSTAT, file, strerror(errno));
-		exit_ls(ls, EXIT_FAILURE);
+		return (0);
 	}
 	free(file);
 	file_size = ft_sizei(buf.st_size);
