@@ -6,7 +6,7 @@
 /*   By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/03 13:53:36 by ciglesia          #+#    #+#             */
-/*   Updated: 2021/07/10 23:51:39 by ciglesia         ###   ########.fr       */
+/*   Updated: 2021/07/11 05:44:43 by ciglesia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ int	measure_dir(char *name, char *path, t_ls *ls)
 	int					file_size;
 	int					link_count;
 
+	if (!ls->flags['l'])
+		return (0);
 	file = path_file(path, name, ls->lslash);
 	ft_memset(&buf, 0, sizeof(struct stat *));
 	if (lstat(file, &buf) == -1)
