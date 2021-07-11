@@ -6,7 +6,7 @@
 #    By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/05/20 17:00:07 by ciglesia          #+#    #+#              #
-#    Updated: 2021/07/10 23:54:05 by ciglesia         ###   ########.fr        #
+#    Updated: 2021/07/11 06:15:57 by ciglesia         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -125,7 +125,12 @@ apt		:
 				sudo apt-get install libselinux1-dev
 				sudo apt-get install libacl1-dev
 
+tests	:
+				bash tests.sh
 
-.PHONY	:		all clean fclean re ftlib
+rmtests	:
+				rm -rf tests
+
+.PHONY	:		all clean fclean re ftlib apt, tests
 
 -include $(DEPS)
