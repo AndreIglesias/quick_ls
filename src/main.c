@@ -6,7 +6,7 @@
 /*   By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/29 19:31:42 by ciglesia          #+#    #+#             */
-/*   Updated: 2021/07/10 23:48:09 by ciglesia         ###   ########.fr       */
+/*   Updated: 2021/07/11 06:00:45 by ciglesia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ int	main(int ac, char **av)
 {
 	t_ls	ls;
 
+	init_lsdir(&ls, 0);
 	ls.size_d = 0;
 	ls.size_f = 0;
 	ls.filerr = 0;

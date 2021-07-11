@@ -6,7 +6,7 @@
 /*   By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/03 13:53:36 by ciglesia          #+#    #+#             */
-/*   Updated: 2021/07/11 05:44:43 by ciglesia         ###   ########.fr       */
+/*   Updated: 2021/07/11 06:05:13 by ciglesia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,5 +105,7 @@ void	ft_ls(t_ls *ls)
 		strquick(ls->dirs, ls->size_d, &alpha_cmp);
 	}
 	print_files(ls->files, ls->flags, ls);
+	if (ls->size_f && ls->size_d)
+		ft_putchar('\n');
 	print_dirs(ls->dirs, ls->flags, ls);
 }
