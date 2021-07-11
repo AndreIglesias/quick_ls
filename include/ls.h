@@ -6,7 +6,7 @@
 /*   By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/29 19:12:52 by ciglesia          #+#    #+#             */
-/*   Updated: 2021/07/11 06:51:36 by ciglesia         ###   ########.fr       */
+/*   Updated: 2021/07/11 16:00:04 by ciglesia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@
 # define WACCESS "ft_ls: cannot access '%s': %s\n"
 # define WDIROP "ft_ls: cannot open directory '%s': %s\n"
 # define WLSTAT "ft_ls: lstat '%s': %s\n"
-# define NDIR 755//923
+# define NDIR 1024
 
 typedef struct s_ls
 {
