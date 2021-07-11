@@ -6,7 +6,7 @@
 /*   By: ciglesia <ciglesia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/10 23:50:33 by ciglesia          #+#    #+#             */
-/*   Updated: 2021/07/11 00:23:51 by ciglesia         ###   ########.fr       */
+/*   Updated: 2021/07/11 17:19:55 by ciglesia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,6 @@ void	print_dir(DIR *dir, char *path, t_u_char *flags, t_ls *ls)
 	}
 	print_content(content, path, ls, c);
 	if (flags['R'])
-		ft_putchar('\n');
-	if (flags['R'])
 		print_recursive(content, c, path, ls);
 }
 
@@ -90,7 +88,7 @@ void	print_recursive(char dirs[][256], size_t c, char *path, t_ls *ls)
 			dir = opendir(file);
 			if (dir)
 			{
-				ft_printf("%s:\n", file);
+				ft_printf("\n%s:\n", file);
 				print_dir(dir, file, ls->flags, ls);
 				closedir(dir);
 			}
@@ -98,7 +96,7 @@ void	print_recursive(char dirs[][256], size_t c, char *path, t_ls *ls)
 				ft_printf_fd(2, WDIROP, *dirs, strerror(errno));
 		}
 		else if (is_file(file) <= 0 && !is_dot(dirs[i]))
-			ft_printf_fd(2, WACCESS"\n", file, strerror(errno));
+			ft_printf_fd(2, WACCESS, file, strerror(errno));
 		free(file);
 		i++;
 	}
